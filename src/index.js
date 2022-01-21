@@ -4,10 +4,11 @@ import './tailwind.output.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import AllRoute from './AllRoute';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AllRoute />
   </React.StrictMode>,
   document.getElementById('root')
 );
