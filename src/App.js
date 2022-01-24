@@ -55,7 +55,7 @@ function App() {
     (
       <>
       {offlineStatus && <Offline />}
-      <Header />
+      <Header mode="light" />
       <Hero />
       <Browse />
       <Arrived items={items} />
