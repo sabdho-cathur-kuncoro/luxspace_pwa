@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Arrived from './components/Arrived';
 import AsideMenu from './components/AsideMenu';
@@ -8,9 +9,12 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Offline from './components/Offline';
+import Cart from './pages/Cart';
+import Details from './pages/Details';
+import Profile from './pages/Profile';
 import Splash from './pages/Splash';
 
-function App() {
+function App({cart}) {
   const [items, setItems] = useState([]);
   const [offlineStatus, setOfflineStatus] = useState(!navigator.onLine);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +59,7 @@ function App() {
     (
       <>
       {offlineStatus && <Offline />}
-      <Header mode="light" />
+      <Header mode="light" cart={cart} />
       <Hero />
       <Browse />
       <Arrived items={items} />
@@ -68,4 +72,30 @@ function App() {
   );
 }
 
-export default App;
+export default function Routers() {
+  const [cart, setCart] = useState([]);
+
+  function handleAddToCart(item) {
+    const currentIndex = cart.length;
+    const newCart = [...cart, {id: currentIndex +1, item}];
+    setCart(newCart);
+  }
+
+  function handleRemoveCartItem(event, id) {
+    const revisedCart = cart.filter(function(item) {
+      return item.id !== id;
+    });
+    setCart(revisedCart);
+  }
+  
+  return (
+    <Router>
+        <Routes>
+            <Route path="/" exact element={<App cart={cart} />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/details/:id" element={<Details handleAddToCart={handleAddToCart} cart={cart} />} />
+            <Route path="/cart" element={<Cart cart={cart} handleRemoveCartItem={handleRemoveCartItem} />} />
+        </Routes>
+    </Router>
+  )
+};
