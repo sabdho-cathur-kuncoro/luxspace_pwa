@@ -73,12 +73,14 @@ function App({cart}) {
 }
 
 export default function Routers() {
+  const cachedCart = window.localStorage.getItem("cart");
   const [cart, setCart] = useState([]);
 
   function handleAddToCart(item) {
     const currentIndex = cart.length;
     const newCart = [...cart, {id: currentIndex +1, item}];
     setCart(newCart);
+    window.localStorage.setItem("cart", JSON.stringify(newCart));
   }
 
   function handleRemoveCartItem(event, id) {
@@ -86,7 +88,15 @@ export default function Routers() {
       return item.id !== id;
     });
     setCart(revisedCart);
+    window.localStorage.setItem("cart", JSON.stringify(revisedCart));
   }
+
+  useEffect(()=> {
+    console.info("useEffect for localStorage");
+    if (cachedCart !== null) {
+      setCart(JSON.parse(cachedCart));
+    }
+  }, [cachedCart]);
   
   return (
     <Router>
